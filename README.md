@@ -3,4 +3,6 @@ Real-time implementation of physical models for a physical modelled modular synt
 
 Video demo: https://youtu.be/xIE8pVRLKjM
 
+Paper: https://projekter.aau.dk/projekter/files/536282944/Embedded_physical_modelling_modular_synthesizer_based_on_FDTD_methods.pdf
+
 ![Stoejbox_LabroChordo](https://github.com/stoier/PhysicalModelledModularSynth/assets/92699192/d58d6255-871c-403f-9de7-cb937f75a271)
