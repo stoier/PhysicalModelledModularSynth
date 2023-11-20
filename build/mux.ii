@@ -1,0 +1,18 @@
+# 1 "/root/Bela/projects/DynamicStiffStringModular/mux.cpp"
+# 1 "<built-in>" 1
+# 1 "<built-in>" 3
+# 365 "<built-in>" 3
+# 1 "<command line>" 1
+# 1 "<built-in>" 2
+# 1 "/root/Bela/projects/DynamicStiffStringModular/mux.cpp" 2
+static int get_num_mux_pins_required(int num_mux_ch)
+{
+    if(num_mux_ch > 4)
+        return 3;
+    if(num_mux_ch > 2)
+        return 2;
+    if(num_mux_ch > 1)
+        return 1;
+    else
+        return 0;
+}

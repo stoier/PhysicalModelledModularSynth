@@ -1,0 +1,234 @@
+# 1 "/root/Bela/projects/DynamicStiffStringModular/ADSR.cpp"
+# 1 "<built-in>" 1
+# 1 "<built-in>" 3
+# 365 "<built-in>" 3
+# 1 "<command line>" 1
+# 1 "<built-in>" 2
+# 1 "/root/Bela/projects/DynamicStiffStringModular/ADSR.cpp" 2
+# 15 "/root/Bela/projects/DynamicStiffStringModular/ADSR.cpp"
+# 1 "/root/Bela/projects/DynamicStiffStringModular/ADSR.h" 1
+# 17 "/root/Bela/projects/DynamicStiffStringModular/ADSR.h"
+# 1 "/root/Bela/projects/DynamicStiffStringModular/ExponentialSegment.h" 1
+# 17 "/root/Bela/projects/DynamicStiffStringModular/ExponentialSegment.h"
+class ExponentialSegment {
+
+public:
+
+ ExponentialSegment();
+
+
+ ExponentialSegment(float sampleRate);
+
+
+ void setSampleRate(float rate);
+
+
+ void setValue(float value);
+
+
+ void rampTo(float value, float time, float overshootRatio = 1.001);
+
+
+ float process();
+
+
+ bool finished();
+
+
+ ~ExponentialSegment();
+
+private:
+
+ double sampleRate_;
+ double currentValue_;
+ double targetValue_;
+ double asymptoteValue_;
+ double expValue_;
+ double multiplier_;
+};
+# 18 "/root/Bela/projects/DynamicStiffStringModular/ADSR.h" 2
+
+class ADSR {
+private:
+
+ enum State {
+  StateOff = 0,
+  StateAttack,
+  StateDecay,
+  StateSustain,
+  StateRelease
+ };
+
+public:
+
+ ADSR();
+
+
+ ADSR(float sampleRate);
+
+
+ void setSampleRate(float rate);
+
+
+ void trigger();
+
+
+ void release();
+
+
+
+ float process();
+
+
+
+ bool isActive();
+
+
+ float getAttackTime() { return attackTime_; }
+ float getDecayTime() { return decayTime_; }
+ float getSustainLevel() { return sustainLevel_; }
+ float getReleaseTime() { return releaseTime_; }
+
+ void setAttackTime(float attackTime);
+ void setDecayTime(float decayTime);
+ void setSustainLevel(float sustainLevel);
+ void setReleaseTime(float releaseTime);
+
+
+ ~ADSR();
+
+private:
+
+ float attackTime_;
+ float decayTime_;
+ float sustainLevel_;
+ float releaseTime_;
+
+ State state_;
+ ExponentialSegment ramp_;
+};
+# 16 "/root/Bela/projects/DynamicStiffStringModular/ADSR.cpp" 2
+
+
+
+
+ADSR::ADSR()
+{
+ attackTime_ = 0.001;
+ decayTime_ = 0.001;
+ sustainLevel_ = 1;
+ releaseTime_ = 0.001;
+
+ state_ = StateOff;
+}
+
+
+void ADSR::setSampleRate(float rate)
+{
+ ramp_.setSampleRate(rate);
+}
+
+
+void ADSR::trigger()
+{
+
+ state_ = StateAttack;
+ ramp_.rampTo(1.0, attackTime_, 1.01);
+}
+
+
+void ADSR::release()
+{
+
+ state_ = StateRelease;
+ ramp_.rampTo(0.0, releaseTime_);
+}
+
+
+
+float ADSR::process()
+{
+
+
+
+
+
+    if(state_ == StateOff) {
+
+ }
+ else if(state_ == StateAttack) {
+
+  if(ramp_.finished()) {
+   state_ = StateDecay;
+   ramp_.rampTo(sustainLevel_, decayTime_);
+  }
+ }
+ else if(state_ == StateDecay) {
+
+  if(ramp_.finished()) {
+   state_ = StateSustain;
+
+  }
+ }
+ else if(state_ == StateSustain) {
+
+ }
+ else if(state_ == StateRelease) {
+
+  if(ramp_.finished()) {
+   state_ = StateOff;
+  }
+ }
+
+
+    return ramp_.process();
+}
+
+
+
+bool ADSR::isActive()
+{
+ return (state_ != StateOff);
+}
+
+
+
+void ADSR::setAttackTime(float attackTime)
+{
+ if(attackTime >= 0)
+  attackTime_ = attackTime;
+ else
+  attackTime_ = 0;
+}
+
+void ADSR::setDecayTime(float decayTime)
+{
+ if(decayTime >= 0)
+  decayTime_ = decayTime;
+ else
+  decayTime_ = 0;
+}
+
+void ADSR::setSustainLevel(float sustainLevel)
+{
+ if(sustainLevel < 0)
+  sustainLevel_ = 0;
+ else if(sustainLevel > 1)
+  sustainLevel_ = 1;
+ else
+  sustainLevel_ = sustainLevel;
+}
+
+void ADSR::setReleaseTime(float releaseTime)
+{
+ if(releaseTime >= 0)
+  releaseTime_ = releaseTime;
+ else
+  releaseTime_ = 0;
+}
+
+
+ADSR::~ADSR()
+{
+
+}
