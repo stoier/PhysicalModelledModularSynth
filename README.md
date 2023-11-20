@@ -1,1 +1,2 @@
 # PhysicalModelledModularSynth
+Real-time implementation of physical models for a physical modelled modular synthesizer using the Bela platform. The physical models are based on finite-difference time domain (FDTD) methods and consist of a damped stiff string and an acoustic tube. Several exciters including a bow, strike, pluck and lip reed have also been implemented. Furthermore, a dynamic grid has been utilised, which allows for smooth variations of the defining physical properties of the models.
